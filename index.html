@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReCircle - Sustainable Tech Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Cursor Glow Effect -->
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <!-- Floating Navigation -->
+    <header class="header" id="header">
+        <div class="header-inner">
+            <a href="#" class="logo" onclick="navigateTo('home')">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 20C12 15.58 15.58 12 20 12C24.42 12 28 15.58 28 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 28V20L26 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="logo-text">ReCircle</span>
+            </a>
+            <nav class="nav">
+                <a href="#" class="nav-link active" data-view="home" onclick="navigateTo('home')">
+                    <i class="fas fa-compass"></i>
+                    Home
+                </a>
+                <a href="#" class="nav-link" data-view="marketplace" onclick="navigateTo('marketplace')">
+                    <i class="fas fa-store"></i>
+                    Marketplace
+                </a>
+                <a href="#" class="nav-link" data-view="upload" onclick="navigateTo('upload')">
+                    <i class="fas fa-camera"></i>
+                    Sell/Recycle
+                </a>
+            </nav>
+            <div class="header-actions">
+                <button class="login-btn" onclick="openAuthModal('login')">
+                    <i class="fas fa-user"></i>
+                    <span id="auth-btn-text">Log In</span>
+                </button>
+                <button class="cta-btn" onclick="navigateTo('upload')">
+                    Start Selling
+                    <span class="btn-arrow"><i class="fas fa-arrow-right"></i></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal-overlay" id="auth-modal-overlay" onclick="closeAuthModal(event)">
+        <div class="auth-modal" id="auth-modal">
+            <button class="auth-close" onclick="closeAuthModal()"><i class="fas fa-times"></i></button>
+            
+            <!-- Login Form -->
+            <div class="auth-form" id="login-form">
+                <div class="auth-header">
+                    <div class="auth-logo">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to continue to ReCircle</p>
+                </div>
+                <div class="auth-body">
+                    <div class="social-login">
+                        <button class="social-btn google-btn">
+                            <i class="fab fa-google"></i>
+                            Google
+                        </button>
+                        <button class="social-btn apple-btn">
+                            <i class="fab fa-apple"></i>
+                            Apple
+                        </button>
+                    </div>
+                    <div class="divider"><span>or</span></div>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="login-email" placeholder="you@example.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="login-password" placeholder="Enter your password" required>
+                                <button type="button" class="toggle-pass" onclick="togglePassword('login-password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" checked>
+                                <span class="checkmark"></span>
+                                Remember me
+                            </label>
+                            <a href="#" class="forgot-link">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="auth-submit">
+                            <span>Log In</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                    <p class="auth-switch">
+                        Don't have an account? <a href="#" onclick="switchAuthForm('signup')">Sign Up</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="auth-form" id="signup-form" style="display:none;">
+                <div class="auth-header">
+                    <div class="auth-logo">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <h2>Join ReCircle</h2>
+                    <p>Create an account and start selling</p>
+                </div>
+                <div class="auth-body">
+                    <div class="social-login">
+                        <button class="social-btn google-btn">
+                            <i class="fab fa-google"></i>
+                            Google
+                        </button>
+                        <button class="social-btn apple-btn">
+                            <i class="fab fa-apple"></i>
+                            Apple
+                        </button>
+                    </div>
+                    <div class="divider"><span>or</span></div>
+                    <form onsubmit="handleSignup(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" placeholder="John" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" placeholder="Doe" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="signup-email" placeholder="you@example.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signup-password" placeholder="Create a password" required>
+                                <button type="button" class="toggle-pass" onclick="togglePassword('signup-password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="password-strength" id="password-strength">
+                                <div class="strength-bar"><div class="strength-fill"></div></div>
+                                <span class="strength-text">Weak</span>
+                            </div>
+                        </div>
+                        <label class="checkbox-label terms">
+                            <input type="checkbox" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                        <button type="submit" class="auth-submit">
+                            <span>Create Account</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                    <p class="auth-switch">
+                        Already have an account? <a href="#" onclick="switchAuthForm('login')">Log In</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <div class="auth-success" id="auth-success" style="display:none;">
+                <div class="success-icon"><i class="fas fa-check"></i></div>
+                <h2 id="success-title">Welcome!</h2>
+                <p id="success-text">You're now logged in to ReCircle.</p>
+                <button class="auth-submit" onclick="closeAuthModal()">
+                    <span>Continue</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <main id="main-content">
+        <!-- HOME VIEW -->
+        <section id="home-view" class="view active">
+            <div class="hero">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="badge-dot"></span>
+                        AI-Powered Device Valuation
+                    </div>
+                    <h1 class="hero-title">
+                        <span class="title-line">Turn Your Old</span>
+                        <span class="title-line gradient-text">Tech Into Treasure</span>
+                        <span class="title-line">& Help The Planet</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Snap a photo of your device. Our AI instantly evaluates its condition,
+                        offers the best price, and calculates your environmental impact.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="primary-btn" onclick="navigateTo('upload')">
+                            <span>Sell Your Device</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                        <button class="secondary-btn" onclick="navigateTo('marketplace')">
+                            Browse Marketplace
+                        </button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number" data-count="15000">0</span>
+                            <span class="stat-label">Devices Recycled</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" data-count="42">0</span>
+                            <span class="stat-label">Tons CO₂ Saved</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" data-count="8500">0</span>
+                            <span class="stat-label">Happy Users</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-devices">
+                        <div class="device device-1">
+                            <div class="device-screen">
+                                <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=500&fit=crop" alt="iPhone" class="device-img">
+                            </div>
+                        </div>
+                        <div class="device device-2">
+                            <div class="device-screen">
+                                <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop" alt="MacBook" class="device-img">
+                            </div>
+                        </div>
+                        <div class="device device-3">
+                            <div class="device-screen">
+                                <img src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=400&h=300&fit=crop" alt="AirPods" class="device-img">
+                            </div>
+                        </div>
+                        <div class="orbit-ring"></div>
+                        <div class="orbit-ring orbit-ring-2"></div>
+                        <div class="glow-orb"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trusted By -->
+            <div class="trusted-section">
+                <p class="trusted-text">Trusted by leading organizations</p>
+                <div class="trusted-logos">
+                    <div class="trusted-logo"><i class="fab fa-apple"></i> Apple</div>
+                    <div class="trusted-logo"><i class="fab fa-samsung"></i> Samsung</div>
+                    <div class="trusted-logo"><i class="fab fa-google"></i> Google</div>
+                    <div class="trusted-logo"><i class="fas fa-recycle"></i> EPA</div>
+                    <div class="trusted-logo"><i class="fas fa-leaf"></i> GreenTech</div>
+                </div>
+            </div>
+
+            <!-- How It Works -->
+            <div class="how-it-works">
+                <div class="section-header">
+                    <span class="section-badge">Simple Process</span>
+                    <h2 class="section-title">How It Works</h2>
+                    <p class="section-subtitle">Four simple steps to turn your old tech into cash</p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-card" data-step="1">
+                        <div class="step-number">01</div>
+                        <div class="step-icon-wrap"><i class="fas fa-camera"></i></div>
+                        <h3>Upload Photo</h3>
+                        <p>Simply snap a picture of your old device. Our AI handles the rest.</p>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-card" data-step="2">
+                        <div class="step-number">02</div>
+                        <div class="step-icon-wrap"><i class="fas fa-brain"></i></div>
+                        <h3>AI Analysis</h3>
+                        <p>Our AI identifies the device, assesses its condition, and calculates its value.</p>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-card" data-step="3">
+                        <div class="step-number">03</div>
+                        <div class="step-icon-wrap"><i class="fas fa-dollar-sign"></i></div>
+                        <h3>Get Paid</h3>
+                        <p>Receive an instant offer. Accept and get paid within 24 hours.</p>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step-card" data-step="4">
+                        <div class="step-number">04</div>
+                        <div class="step-icon-wrap"><i class="fas fa-seedling"></i></div>
+                        <h3>Save The Planet</h3>
+                        <p>Your device gets responsibly recycled or refurbished. Track your eco-impact!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Devices -->
+            <div class="featured-section">
+                <div class="section-header">
+                    <span class="section-badge">Popular Items</span>
+                    <h2 class="section-title">Featured Devices</h2>
+                    <p class="section-subtitle">Certified refurbished at incredible prices</p>
+                </div>
+                <div class="featured-grid" id="featured-grid"></div>
+            </div>
+
+            <!-- Eco Impact Section -->
+            <div class="eco-section">
+                <div class="eco-bg-shapes">
+                    <div class="eco-shape shape-1"></div>
+                    <div class="eco-shape shape-2"></div>
+                    <div class="eco-shape shape-3"></div>
+                </div>
+                <div class="eco-content">
+                    <div class="section-header">
+                        <span class="section-badge">Environmental Impact</span>
+                        <h2 class="section-title">Your Impact Matters</h2>
+                        <p class="section-subtitle">Every device you recycle contributes to a cleaner planet</p>
+                    </div>
+                    <div class="eco-metrics">
+                        <div class="eco-metric">
+                            <div class="metric-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <defs>
+                                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#00d4aa"/>
+                                            <stop offset="100%" style="stop-color:#6c5ce7"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <circle cx="50" cy="50" r="45" class="metric-bg"/>
+                                    <circle cx="50" cy="50" r="45" class="metric-fill" data-percent="73" stroke="url(#grad1)"/>
+                                </svg>
+                                <span class="metric-value">73%</span>
+                            </div>
+                            <span class="metric-label">Materials Recovered</span>
+                        </div>
+                        <div class="eco-metric">
+                            <div class="metric-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" class="metric-bg"/>
+                                    <circle cx="50" cy="50" r="45" class="metric-fill" data-percent="89" stroke="url(#grad1)"/>
+                                </svg>
+                                <span class="metric-value">89%</span>
+                            </div>
+                            <span class="metric-label">Carbon Offset</span>
+                        </div>
+                        <div class="eco-metric">
+                            <div class="metric-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" class="metric-bg"/>
+                                    <circle cx="50" cy="50" r="45" class="metric-fill" data-percent="95" stroke="url(#grad1)"/>
+                                </svg>
+                                <span class="metric-value">95%</span>
+                            </div>
+                            <span class="metric-label">User Satisfaction</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="testimonials-section">
+                <div class="section-header">
+                    <span class="section-badge">Testimonials</span>
+                    <h2 class="section-title">What Users Say</h2>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p>"Sold my old iPhone in minutes. The AI evaluation was spot-on and I got paid the next day!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">SK</div>
+                            <div>
+                                <strong>Sarah K.</strong>
+                                <span>San Francisco, CA</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p>"Love the eco-score feature! It feels great knowing my old laptop is being recycled responsibly."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">MJ</div>
+                            <div>
+                                <strong>Mike J.</strong>
+                                <span>Austin, TX</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p>"Bought a refurbished MacBook for 40% off. Looks brand new and came with a warranty!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">AL</div>
+                            <div>
+                                <strong>Amanda L.</strong>
+                                <span>New York, NY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARKETPLACE VIEW -->
+        <section id="marketplace-view" class="view">
+            <div class="marketplace-header">
+                <div class="marketplace-title-area">
+                    <h1 class="page-title">Marketplace</h1>
+                    <p class="page-subtitle">Discover certified refurbished devices at amazing prices</p>
+                </div>
+                <div class="marketplace-filters">
+                    <button class="filter-btn active" data-filter="all">All Devices</button>
+                    <button class="filter-btn" data-filter="phones"><i class="fas fa-mobile-alt"></i> Phones</button>
+                    <button class="filter-btn" data-filter="laptops"><i class="fas fa-laptop"></i> Laptops</button>
+                    <button class="filter-btn" data-filter="tablets"><i class="fas fa-tablet-alt"></i> Tablets</button>
+                    <button class="filter-btn" data-filter="audio"><i class="fas fa-headphones"></i> Audio</button>
+                    <button class="filter-btn" data-filter="watches"><i class="fas fa-clock"></i> Watches</button>
+                </div>
+            </div>
+            <div class="marketplace-grid" id="marketplace-grid"></div>
+        </section>
+
+        <!-- UPLOAD VIEW -->
+        <section id="upload-view" class="view">
+            <div class="upload-container">
+                <div class="upload-header">
+                    <span class="section-badge">AI Powered</span>
+                    <h1 class="page-title">Sell or Recycle Your Device</h1>
+                    <p class="page-subtitle">Upload a photo and let our AI handle the valuation</p>
+                </div>
+
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-zone" id="upload-zone">
+                        <div class="upload-icon-wrapper">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-pulse"></div>
+                            <div class="upload-pulse pulse-2"></div>
+                        </div>
+                        <h3 class="upload-title">Drop your device photo here</h3>
+                        <p class="upload-subtitle">or click to browse files</p>
+                        <p class="upload-formats">Supports: JPG, PNG, HEIC (Max 10MB)</p>
+                        <input type="file" accept="image/*" id="device-image-input" class="file-input">
+                    </div>
+
+                    <div class="image-preview-container" id="image-preview-container" style="display:none;">
+                        <img id="image-preview" class="image-preview" alt="Device preview">
+                        <button class="remove-image-btn" onclick="removeImage()"><i class="fas fa-times"></i></button>
+                        <div class="preview-overlay">
+                            <button class="analyze-btn" onclick="handleUpload()">
+                                <span class="analyze-text">Analyze with AI</span>
+                                <span class="analyze-icon"><i class="fas fa-bolt"></i></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="loading-indicator" id="loading-indicator" style="display:none;">
+                        <div class="scanner-animation">
+                            <div class="scanner-line"></div>
+                            <div class="scanner-device">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                        </div>
+                        <p class="loading-text">Analyzing with AI...</p>
+                        <p class="loading-subtext">Identifying device and assessing condition</p>
+                        <div class="loading-steps">
+                            <div class="load-step active"><i class="fas fa-check-circle"></i> Detecting device...</div>
+                            <div class="load-step"><i class="fas fa-circle"></i> Analyzing condition...</div>
+                            <div class="load-step"><i class="fas fa-circle"></i> Calculating value...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Card -->
+                <div class="result-card" id="result-card" style="display:none;">
+                    <div class="result-header">
+                        <div class="result-badge"><i class="fas fa-sparkles"></i> AI Analysis Complete</div>
+                    </div>
+                    <div class="result-content">
+                        <div class="result-device-section">
+                            <div class="result-device-image" id="result-device-image">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="device-info">
+                                <h2 class="device-name" id="device-name">iPhone 14 Pro</h2>
+                                <p class="device-condition" id="device-condition">Excellent Condition</p>
+                                <div class="device-tags" id="device-tags">
+                                    <span class="tag">128GB</span>
+                                    <span class="tag">Space Gray</span>
+                                    <span class="tag">Unlocked</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-metrics">
+                            <div class="metric-item price-metric">
+                                <span class="metric-label">Estimated Value</span>
+                                <span class="metric-value" id="device-price">$450</span>
+                                <span class="metric-change"><i class="fas fa-arrow-up"></i> +12% vs last week</span>
+                            </div>
+                            <div class="metric-item eco-metric-result">
+                                <span class="metric-label">Eco Score</span>
+                                <div class="eco-score-display">
+                                    <span class="eco-score" id="eco-score">A+</span>
+                                    <div class="eco-bar">
+                                        <div class="eco-bar-fill" id="eco-bar-fill" style="width: 0%"></div>
+                                    </div>
+                                    <span class="eco-points" id="eco-points">+250 Eco Points</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="recommendation" id="recommendation">
+                            <div class="rec-icon" id="rec-icon">♻️</div>
+                            <div class="rec-content">
+                                <h3>We recommend: <span id="rec-action">Sell</span></h3>
+                                <p id="rec-text">This device is in great condition and can be refurbished for another user.</p>
+                            </div>
+                        </div>
+                        <div class="result-actions">
+                            <button class="action-btn sell-btn" id="sell-btn" onclick="handleSell()">
+                                <i class="fas fa-dollar-sign"></i>
+                                Sell Device
+                                <span class="btn-price" id="sell-price">$450</span>
+                            </button>
+                            <button class="action-btn recycle-btn" id="recycle-btn" onclick="handleRecycle()">
+                                <i class="fas fa-recycle"></i>
+                                Recycle & Earn Eco Points
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Chat Widget -->
+    <div class="chat-widget" id="chat-widget">
+        <button class="chat-toggle" id="chat-toggle" onclick="toggleChat()">
+            <i class="fas fa-comment-dots chat-icon"></i>
+            <i class="fas fa-times chat-close-icon" style="display:none;"></i>
+        </button>
+        <div class="chat-window" id="chat-window" style="display:none;">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+                    <div>
+                        <h4>ReCircle Assistant</h4>
+                        <span class="chat-status"><span class="status-dot"></span> Online</span>
+                    </div>
+                </div>
+                <button class="chat-close-btn" onclick="toggleChat()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        Hi! I'm your ReCircle assistant. How can I help you today?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-suggestions">
+                <button class="suggestion-chip" onclick="sendSuggestion('How do I sell my device?')">How do I sell?</button>
+                <button class="suggestion-chip" onclick="sendSuggestion('What is the eco score?')">Eco score?</button>
+                <button class="suggestion-chip" onclick="sendSuggestion('How much is my phone worth?')">Device value?</button>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Type your message..." onkeypress="handleChatKeypress(event)">
+                <button class="chat-send-btn" onclick="sendChatMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Device Details Modal -->
+    <div class="details-modal-overlay" id="details-modal-overlay" onclick="closeDetailsModal(event)">
+        <div class="details-modal" id="details-modal">
+            <button class="details-close" onclick="closeDetailsModal()"><i class="fas fa-times"></i></button>
+            <div class="details-content">
+                <div class="details-gallery">
+                    <div class="details-main-image" id="details-main-image">
+                        <img src="" alt="" id="details-img">
+                        <span class="details-eco-badge" id="details-eco-badge"></span>
+                    </div>
+                    <div class="details-thumbnails" id="details-thumbnails"></div>
+                </div>
+                <div class="details-info">
+                    <div class="details-category" id="details-category"></div>
+                    <h2 class="details-name" id="details-name"></h2>
+                    <div class="details-rating">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                        <span id="details-reviews">4.8 (124 reviews)</span>
+                    </div>
+                    <div class="details-price-row">
+                        <span class="details-price" id="details-price"></span>
+                        <span class="details-original" id="details-original"></span>
+                        <span class="details-savings" id="details-savings"></span>
+                    </div>
+                    <p class="details-description" id="details-description"></p>
+
+                    <div class="details-specs">
+                        <h3>Specifications</h3>
+                        <div class="specs-grid" id="details-specs-grid"></div>
+                    </div>
+
+                    <div class="details-condition">
+                        <h3>Device Condition</h3>
+                        <div class="condition-bar" id="details-condition-bar">
+                            <div class="condition-fill"></div>
+                        </div>
+                        <p class="condition-text" id="details-condition-text"></p>
+                    </div>
+
+                    <div class="details-eco-section">
+                        <div class="eco-info">
+                            <i class="fas fa-leaf"></i>
+                            <div>
+                                <strong>Eco Score: <span id="details-eco-score"></span></strong>
+                                <p id="details-eco-text"></p>
+                            </div>
+                        </div>
+                        <div class="eco-points-badge">
+                            <i class="fas fa-coins"></i>
+                            <span id="details-eco-points"></span>
+                        </div>
+                    </div>
+
+                    <div class="details-warranty">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>12-Month Warranty Included</span>
+                    </div>
+
+                    <div class="details-seller">
+                        <div class="seller-avatar"><i class="fas fa-store"></i></div>
+                        <div class="seller-info">
+                            <strong>ReCircle Certified</strong>
+                            <span>Official Seller · Ships in 24hrs</span>
+                        </div>
+                        <button class="seller-chat-btn"><i class="fas fa-comment"></i></button>
+                    </div>
+
+                    <div class="details-actions">
+                        <button class="details-buy-btn" id="details-buy-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Add to Cart
+                        </button>
+                        <button class="details-wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
